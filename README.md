@@ -1,8 +1,11 @@
 # Henry Hub Natural Gas Prices
 
-At the moment this code only gathers daily data from http://www.eia.gov/dnav/ng/hist/rngwhhdd.htm
+This code gathers daily and monthly data from http://www.eia.gov/dnav/ng/hist/rngwhhdd.htm
 
-Script itself can be found in gas_prices.py file
+Script for 'daily data' can be found here [script](/gas_prices_daily.py)
 
-Generated data can be found in data.csv file
+Generated 'daily data' can be found here [data](/data_daily.csv)
 
+Script for 'monthly data' can be found here [script](/gas_prices_monthly.py)
+
+Generated 'monthly data' can be found here [data](/data_monthly.csv)
