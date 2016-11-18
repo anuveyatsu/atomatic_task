@@ -10,6 +10,8 @@
 
 * Generated **monthly data** can be found here [data](/data_monthly.csv)
 
+* Visualization with Vega in D3 of **daily data** can be found here [html](/graph_of_daily_prices.html)
+
 
 #### Instructions
 
