@@ -16,12 +16,14 @@ def date_handler(data):
     date = datetime.datetime.strptime(yyyyMmmdd, "%Y%b%d")
     for i in range(5):
         new_date = date + datetime.timedelta(days=i)
-        new_date = new_date.strftime('%Y/%m/%d')
-        daily_data.append(new_date)
+        daily_data.append(new_date.date())
 
 def price_handler(data):
     ''' Appends daily prices into daily_data array '''
-    daily_data.append(data)
+    if 'r' in data:
+        daily_data.append(None)
+    else:
+        daily_data.append(float(data))
 
 class DataFinder(HTMLParser):
     ''' This is a child class of HTMLParser '''
@@ -49,7 +51,7 @@ table = DataFinder()
 table.feed(f)
 table.close()
 
-filepath = './data.csv'
+filepath = './data_daily.csv'
 with open(filepath, 'w', newline='') as csvfile:
     data_writer = csv.writer(csvfile)
     data_writer.writerow(['date'] + ['price'])
