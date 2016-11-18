@@ -17,7 +17,7 @@
 - This code uses only Standard Libraries distributed with Python 3.5.2
 
 To get daily natural gas prices just run script using Python:
-> python gas_prices_daily.py
+> $ python gas_prices_daily.py
 
 To get monthly natural gas prices just run script using Python:
-> python gas_prices_monthly.py
+> $ python gas_prices_monthly.py

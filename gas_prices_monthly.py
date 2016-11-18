@@ -43,17 +43,19 @@ class DataFinder(HTMLParser):
             price_handler(data)
             this_is_value = False
 
+# getting page content
 f = urllib.request.urlopen('http://www.eia.gov/dnav/ng/hist/rngwhhdM.htm')
-f = str(f.read())
+f = str(f.read()) # data is encoded but we only need to convert it into string
 table = DataFinder()
 table.feed(f)
 table.close()
 
+# writing data from monthly_data array into csv file
 filepath = './data_monthly.csv'
 with open(filepath, 'w', newline='') as csvfile:
     data_writer = csv.writer(csvfile)
-    data_writer.writerow(['date'] + ['price'])
+    data_writer.writerow(['date'] + ['price']) # metadata
     n = len(monthly_data)
-    for i in range(0,n,24):
+    for i in range(0,n,24): # looping over monthly_data
         for j in range(12):
             data_writer.writerow([monthly_data[i+j]] + [monthly_data[i+j+12]])
