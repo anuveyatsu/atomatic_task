@@ -1,0 +1,1 @@
+{"resources": [{"path": "./data_monthly.csv", "schema": {"fields": [{"type": "date", "description": "", "title": "", "format": "default", "name": "date"}, {"type": "number", "description": "", "title": "", "format": "default", "name": "price"}]}, "name": "data"}], "title": "Monthly Natural Gas Prices", "name": "monthly-natural-gas-prices"}
