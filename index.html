@@ -39,11 +39,16 @@
           data.points.push({"x":x,"y":y});
         }
         vegaFunc(data);
-        data10y = data["points"].slice(Math.max(data["points"].length - 2609, 1));
-        data5y = data10y.slice(Math.max(data10y.length - 1304, 1));
-        data1y = data5y.slice(Math.max(data5y.length - 261, 1));
-        data6m = data1y.slice(Math.max(data1y.length - 130, 1));
-        data1m = data6m.slice(Math.max(data6m.length - 22, 1));
+
+        var average_days_per_year = 365.25;
+        var days_per_week = 7;
+        var workdays_per_week = 5;
+        var workdays_per_year = average_days_per_year / days_per_week * workdays_per_week;
+        data10y = data["points"].slice(Math.max(data["points"].length - Math.round(workdays_per_year*10), 1));
+        data5y = data10y.slice(Math.max(data10y.length - Math.round(workdays_per_year*5), 1));
+        data1y = data5y.slice(Math.max(data5y.length - Math.round(workdays_per_year), 1));
+        data6m = data1y.slice(Math.max(data1y.length - Math.round(workdays_per_year/2), 1));
+        data1m = data6m.slice(Math.max(data6m.length - Math.round(workdays_per_year/12), 1));
         data10y = { "points" : data10y };
         data5y = { "points" : data5y };
         data1y = { "points" : data1y };
