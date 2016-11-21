@@ -12,6 +12,10 @@
 
 * Visualization with Vega in D3 of **daily data** can be found here [html](/graph_of_daily_prices.html)
 
+#### Visualization:
+
+To see visualization of data please [click here](https://anuveyatsu.github.io/atomatic_task/).
+
 
 #### Instructions
 
