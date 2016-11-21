@@ -4,7 +4,7 @@
     <script src="https://trifacta.github.io/vega/vega.js"></script>
     <style>
       * { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; }
-      body { width: 80%; line-height: 16pt; }
+      body { width: 450px; line-height: 16pt; }
     </style>
   </head>
   <body>
@@ -12,20 +12,30 @@
     <div id="view" class="view"></div>
   </body>
   <script type="text/javascript">
-    var myArray = ["1997", "1998", "1999", "2000", "2001", "2002", "2003",
-                    "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012",
-                    "2013", "2014", "2015", "2016"];
+    var data = { "points" : [] };
+    var somedate;
+    d3.csv("data_daily.csv", function(error, mydata){
+        for (var i = 0; i < mydata.length; i++) {
+          var x = new Date(mydata[i].date);
+          var y = parseFloat(mydata[i].price);
+          data.points.push({"x":x,"y":y});
+        }
+        vegaFunc();
+    });
+
     var spec = {
       "width": 900,
-      "height": 450,
+      "height": 500,
       "padding": {"top": 40, "left": 50, "bottom": 50, "right": 40},
       "data": [{"name" : "points"}],
           "scales": [
                   {
                     "name": "x",
+                    "type": "utc",
                     "nice": true,
                     "range": "width",
-                    "domain": myArray
+                    "domain": {"data": "points", "field": "data.x"},
+                    "zero": false
                   },
                   {
                     "name": "y",
@@ -36,7 +46,7 @@
           ],
           "axes": [
                   {"type": "x", "scale": "x", "title": "Year", "ticks": 20},
-                  {"type": "y", "scale": "y", "title": "Dollars per Million Btu"}
+                  {"type": "y", "scale": "y", "title": "Dollars per Million Btu", "ticks": 20}
           ],
           "marks": [
                   {
@@ -62,18 +72,12 @@
           ]
     };
 
-    var data = { "points" : [] };
-    d3.csv("data_daily.csv", function(error, mydata){
-        for (var i = 0; i < mydata.length; i++) {
-          var x = new Date(mydata[i].date);
-          var y = parseFloat(mydata[i].price);
-          data.points.push({"x":i,"y":y});
-        }
-    });
+    var vegaFunc = function() {
+      vg.parse.spec(spec, function(chart) {
+        var view = chart({el:"#view", data:data})
+          .update();
+      });
+    }
 
-    vg.parse.spec(spec, function(chart) {
-      var view = chart({el:"#view", data:data})
-        .update();
-    });
   </script>
 </html>
