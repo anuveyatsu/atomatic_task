@@ -1,30 +1,96 @@
 <html>
   <head>
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"
+      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+      integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
+    </script>
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="https://trifacta.github.io/vega/vega.js"></script>
     <style>
       * { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; }
-      body { width: 450px; line-height: 16pt; }
+      body { width: 100vw; line-height: 16pt; }
     </style>
   </head>
   <body>
-    <p><strong>Henry Hub Natural Gas Spot Price</strong></p>
+    <h2><strong>Henry Hub Natural Gas Spot Price</strong></h2>
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="active"><a href="#" onclick="all_time()">All time</a></li>
+      <li role="presentation"><a href="#" onclick="ten_years()">10 years</a></li>
+      <li role="presentation"><a href="#" onclick="five_years()">5 years</a></li>
+      <li role="presentation"><a href="#" onclick="one_year()">1 year</a></li>
+      <li role="presentation"><a href="#" onclick="six_months()">6 months</a></li>
+      <li role="presentation"><a href="#" onclick="one_month()">1 month</a></li>
+    </ul>
     <div id="view" class="view"></div>
   </body>
   <script type="text/javascript">
+
     var data = { "points" : [] };
-    var somedate;
+    var data10y, data5y, data1y, data6m, data1m;
+    var tabs = document.getElementsByTagName('li');
+
     d3.csv("data_daily.csv", function(error, mydata){
         for (var i = 0; i < mydata.length; i++) {
           var x = new Date(mydata[i].date);
           var y = parseFloat(mydata[i].price);
           data.points.push({"x":x,"y":y});
         }
-        vegaFunc();
+        vegaFunc(data);
+        data10y = data["points"].slice(Math.max(data["points"].length - 2609, 1));
+        data5y = data10y.slice(Math.max(data10y.length - 1304, 1));
+        data1y = data5y.slice(Math.max(data5y.length - 261, 1));
+        data6m = data1y.slice(Math.max(data1y.length - 130, 1));
+        data1m = data6m.slice(Math.max(data6m.length - 22, 1));
+        data10y = { "points" : data10y };
+        data5y = { "points" : data5y };
+        data1y = { "points" : data1y };
+        data6m = { "points" : data6m };
+        data1m = { "points" : data1m };
     });
 
+    var all_time = function() {
+      tabs_passive();
+      tabs[0].className = "active";
+      vegaFunc(data);
+    };
+
+    var ten_years = function() {
+      tabs_passive();
+      tabs[1].className = "active";
+      vegaFunc(data10y);
+    };
+    var five_years = function() {
+      tabs_passive();
+      tabs[2].className = "active";
+      vegaFunc(data5y);
+    };
+    var one_year = function() {
+      tabs_passive();
+      tabs[3].className = "active";
+      vegaFunc(data1y);
+    };
+    var six_months = function() {
+      tabs_passive();
+      tabs[4].className = "active";
+      vegaFunc(data6m);
+    };
+    var one_month = function() {
+      tabs_passive();
+      tabs[5].className = "active";
+      vegaFunc(data1m);
+    };
+
+    var tabs_passive = function() {
+      for (var i = 0; i < tabs.length; i++) {
+        tabs[i].className = "";
+      }
+    };
+
     var spec = {
-      "width": 900,
+      "width": 1000,
       "height": 500,
       "padding": {"top": 40, "left": 50, "bottom": 50, "right": 40},
       "data": [{"name" : "points"}],
@@ -45,7 +111,7 @@
                   }
           ],
           "axes": [
-                  {"type": "x", "scale": "x", "title": "Year", "ticks": 20},
+                  {"type": "x", "scale": "x", "title": "Date"},
                   {"type": "y", "scale": "y", "title": "Dollars per Million Btu", "ticks": 20}
           ],
           "marks": [
@@ -72,9 +138,9 @@
           ]
     };
 
-    var vegaFunc = function() {
+    var vegaFunc = function(new_data) {
       vg.parse.spec(spec, function(chart) {
-        var view = chart({el:"#view", data:data})
+        var view = chart({el:"#view", data:new_data})
           .update();
       });
     }
